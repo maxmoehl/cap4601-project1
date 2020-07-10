@@ -66,6 +66,15 @@ public class Main {
         return weightedDict;
     }
 
+    /**
+     * Takes two dictionaries that map words to their weights for one document and
+     * calculates the cosine similarity from them.
+     *
+     * @param weightedDictionary1 first document
+     * @param weightedDictionary2 second document
+     * @return cosine similarity
+     * @author Maximilian Moehl
+     */
     static double cosineSimilarity(HashMap<String, Double> weightedDictionary1, HashMap<String, Double> weightedDictionary2) {
         // extract values as an array for easier calculations
         Double[] weightsDict1 = weightedDictionary1.values().toArray(new Double[0]);
@@ -73,6 +82,15 @@ public class Main {
         return scalarProduct(weightsDict1, weightsDict2) / (Math.sqrt(sumOfSquares(weightsDict1)) * Math.sqrt(sumOfSquares(weightsDict2)));
     }
 
+    /**
+     * Calculates the scalar product (also called inner product) of two vectors
+     * that have the same size
+     * @param arr1 first array of doubles
+     * @param arr2 second array of doubles
+     * @return scalar product
+     * @throws ArithmeticException when size of arrays does not match
+     * @author Maximilian Moehl
+     */
     static double scalarProduct(Double[] arr1, Double[] arr2) {
         double sum = 0;
         if (arr1.length != arr2.length) {
@@ -84,6 +102,13 @@ public class Main {
         return sum;
     }
 
+    /**
+     * Takes a given array of doubles, raises every value to the power
+     * of two and sums them up.
+     * @param array to be processed
+     * @return sum of squares
+     * @author Maximilian Moehl
+     */
     static double sumOfSquares(Double[] array) {
         double sum = 0;
         for (double d : array) {
@@ -92,6 +117,14 @@ public class Main {
         return sum;
     }
 
+    /**
+     * Takes the finished document matrix, builds a string
+     * representing the whole matrix including labels and
+     * prints it to the console
+     *
+     * @param m document matrix containing cosine similarity values
+     * @author Maximilian Moehl
+     */
     static void printDocumentMatrixToConsole(double[][] m) {
         StringBuilder sb = new StringBuilder("\t");
         // Add the title line containing the labels for each column
@@ -115,6 +148,12 @@ public class Main {
         System.out.println(sb.toString());
     }
 
+    /**
+     * The main function of this java program
+     *
+     * @param args command line arguments
+     * @author Maximilian Moehl
+     */
     public static void main(String[] args) {
         if (args.length == 0) {
             throw new IllegalArgumentException("Missing directory argument");
@@ -146,7 +185,7 @@ public class Main {
             weightedDictionaries.set(i, generateWeightedDictionary(ii, frequencyMaps.get(i), documents.length));
         }
 
-        // Combine the weights using the cosine similarity into one big matrix
+        // Combine the weights into one big matrix using the cosine similarity
         double[][] similarityMatrix = new double[documents.length][documents.length];
         for (int i = 0; i < documents.length; i++) {
             for (int j = 0; j < documents.length; j++) {
