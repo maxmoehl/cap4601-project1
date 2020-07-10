@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -52,12 +54,12 @@ public class Main {
         String path = args[0];
 
         String[] documents = readDocuments(path);
-        HashMap<String, Integer>[] frequencyMaps = new HashMap[documents.length];
+        List<HashMap<String, Integer>> frequencyMaps = new ArrayList<>();
 
         for (int i = 0; i < documents.length; i++) {
             String[] tokens = tokenizeDocument(documents[i]);
             tokens = removeStopWords(tokens);
-            frequencyMaps[i] = generateWordFrequencyMap(tokens);
+            frequencyMaps.set(i, generateWordFrequencyMap(tokens));
         }
         InvertedIndex ii = new InvertedIndex(frequencyMaps);
     }

@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * This class is used to represent an inverted index. It uses a HashMap as the
- * underlying data structure. This class provides functions that fit the use
- * case of an inverted index and basically just translates them to the calls
+ * underlying data structure and provides functions that fit the use
+ * case of an inverted index and basically just translates them to calls
  * on the HashMap.
  *
  * @author Maximilian Möhl
@@ -15,25 +16,26 @@ import java.util.Map;
 
 public class InvertedIndex {
 
-    private HashMap<String, ArrayList<Integer>> store;
+    private final HashMap<String, ArrayList<Integer>> store;
 
+    /**
+     * Initializes an empty {@code InvertedIndex}.
+     */
     public InvertedIndex() {
         store = new HashMap<>();
     }
 
     /**
-     * Takes multiple frequency maps and builds an InvertedIndex out of them
+     * Takes a lsit of frequency maps and builds an InvertedIndex out of them
      * for further usage.
      *
      * @param frequencyMaps should contain frequency maps of multiple documents
-     *
-     * @author Maximilian Moehl
      */
-    public InvertedIndex(HashMap<String, Integer>[] frequencyMaps) {
-        super();
-        for (int i = 0; i < frequencyMaps.length; i++) {
+    public InvertedIndex(List<HashMap<String, Integer>> frequencyMaps) {
+        this();
+        for (int i = 0; i < frequencyMaps.size(); i++) {
             // iterate over all contents
-            for (Map.Entry<String, Integer> stringIntegerEntry : frequencyMaps[i].entrySet()) {
+            for (Map.Entry<String, Integer> stringIntegerEntry : frequencyMaps.get(i).entrySet()) {
                 // and store them in the InvertedIndex
                 this.addDocumentId(stringIntegerEntry.getKey(), i);
             }
@@ -55,14 +57,19 @@ public class InvertedIndex {
     }
 
     /**
-     * Returns the documentIds that are stored for a given word.
+     * Returns the documentIds that are stored for a given word. If the word is not
+     * part of the index, {@code null} will be returned.
      *
      * @param word to be looked up
      * @return a copy of the list that is stored
      */
     public Integer[] getDocumentIds(String word) {
-        Integer[] tmp = new Integer[store.get(word).size()];
-        store.get(word).toArray(tmp);
-        return tmp;
+        List<Integer> documentIds = store.get(word);
+        if (documentIds == null) {
+            return null;
+        }
+        Integer[] returnArray = new Integer[store.get(word).size()];
+        store.get(word).toArray(returnArray);
+        return returnArray;
     }
 }
