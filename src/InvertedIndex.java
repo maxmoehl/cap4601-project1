@@ -72,4 +72,21 @@ public class InvertedIndex {
         store.get(word).toArray(returnArray);
         return returnArray;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (Map.Entry<String, ArrayList<Integer>> e : store.entrySet()) {
+            s.append(e.getKey());
+            s.append(": ");
+            for (Integer i : e.getValue()) {
+                s.append(i.toString());
+                s.append(", ");
+            }
+            // Remove trailing commas and spaces
+            s.delete(s.length() - 2, s.length() - 1);
+            s.append("\n");
+        }
+        return s.toString();
+    }
 }

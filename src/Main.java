@@ -62,5 +62,8 @@ public class Main {
             frequencyMaps.set(i, generateWordFrequencyMap(tokens));
         }
         InvertedIndex ii = new InvertedIndex(frequencyMaps);
+        if (debugEnabled()) {
+            System.out.println(ii.toString());
+        }
     }
 }
