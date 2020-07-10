@@ -45,6 +45,26 @@ public class Main {
         return null;
     }
 
+    /**
+     * Generates a HashMap that uses a word as a key stores the weight for it
+     * in the value. For reference, this is the 'translation':<br><br>
+     * tfij = frequencyMap.get(word)<br>
+     * N = documentCount<br>
+     * dfi = ii.getDocumentIds(word).length<br>
+     * wij = (1 + log(tfij)) * log(N / dfi)
+     *
+     * @return weighted dictionary
+     * @author Maximilian Moehl
+     */
+    static HashMap<String, Double> generateWeightedDictionary(InvertedIndex ii, HashMap<String, Integer> frequencyMap, int documentCount) {
+        HashMap<String, Double> weightedDict = new HashMap<>();
+        String[] dict = ii.getDictionary();
+        for (String word : dict) {
+            weightedDict.put(word, (1 + Math.log(frequencyMap.get(word))) * Math.log((double) documentCount / ii.getDocumentIds(word).length));
+        }
+        return weightedDict;
+    }
+
     public static void main(String[] args) {
         if (args.length == 0) {
             throw new IllegalArgumentException("Missing directory argument");
@@ -65,5 +85,7 @@ public class Main {
         if (debugEnabled()) {
             System.out.println(ii.toString());
         }
+        // Generate a weighted dictionary for each document and calculate the
+        // document-document incidence matrix
     }
 }

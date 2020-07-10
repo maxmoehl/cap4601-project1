@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class is used to represent an inverted index. It uses a HashMap as the
@@ -9,7 +6,7 @@ import java.util.Map;
  * case of an inverted index and basically just translates them to calls
  * on the HashMap.
  *
- * @author Maximilian Möhl
+ * @author Maximilian Moehl
  * @date 2020/07/10
  * @info course CAP4601
  */
@@ -71,6 +68,16 @@ public class InvertedIndex {
         Integer[] returnArray = new Integer[store.get(word).size()];
         store.get(word).toArray(returnArray);
         return returnArray;
+    }
+
+    public String[] getDictionary() {
+        String[] dict = new String[store.size()];
+        int index = 0;
+        for (Map.Entry<String, ArrayList<Integer>> e : store.entrySet()) {
+            dict[index] = e.getKey();
+        }
+        Arrays.sort(dict);
+        return dict;
     }
 
     @Override
