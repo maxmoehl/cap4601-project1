@@ -1,12 +1,13 @@
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
 /**
  * This file contains the main function and executes all of the programs code.
  *
- * @author Maximilian Moehl
+ * @author Yanick Schwitzer, Lucas Timm, Maximilian Moehl
  * @date 2020/07/10
- * @info CAP4601
+ * @info course CAP4601
  */
-import java.util.HashMap;
-import java.util.StringTokenizer;
 
 public class Main {
     private static boolean DEBUG;
@@ -42,11 +43,6 @@ public class Main {
         return null;
     }
 
-    // Maximilian
-    static void generateInvertedIndex(HashMap<String, Integer>[] frequencyMaps) {
-
-    }
-
     public static void main(String[] args) {
         if (args.length == 0) {
             throw new IllegalArgumentException("Missing directory argument");
@@ -63,7 +59,6 @@ public class Main {
             tokens = removeStopWords(tokens);
             frequencyMaps[i] = generateWordFrequencyMap(tokens);
         }
-        generateInvertedIndex(frequencyMaps);
-
+        InvertedIndex ii = new InvertedIndex(frequencyMaps);
     }
 }
