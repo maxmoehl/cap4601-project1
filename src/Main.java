@@ -24,10 +24,8 @@ public class Main {
     }
 
     /**
-     *
      * @param document
      * @return
-     *
      * @author Yanick Schweitzer
      */
     static String[] tokenizeDocument(String document) {
@@ -53,8 +51,8 @@ public class Main {
      * dfi = ii.getDocumentIds(word).length<br>
      * wij = (1 + log(tfij)) * log(N / dfi)
      *
-     * @param ii the inverted index for the documents to be processed
-     * @param frequencyMap word frequencies for the document that is being processed
+     * @param ii            the inverted index for the documents to be processed
+     * @param frequencyMap  word frequencies for the document that is being processed
      * @param documentCount total count of documents to be processed
      * @return weighted dictionary
      * @author Maximilian Moehl
@@ -68,6 +66,55 @@ public class Main {
         return weightedDict;
     }
 
+    static double cosineSimilarity(HashMap<String, Double> weightedDictionary1, HashMap<String, Double> weightedDictionary2) {
+        // extract values as an array for easier calculations
+        Double[] weightsDict1 = weightedDictionary1.values().toArray(new Double[0]);
+        Double[] weightsDict2 = weightedDictionary2.values().toArray(new Double[0]);
+        return scalarProduct(weightsDict1, weightsDict2) / (Math.sqrt(sumOfSquares(weightsDict1)) * Math.sqrt(sumOfSquares(weightsDict2)));
+    }
+
+    static double scalarProduct(Double[] arr1, Double[] arr2) {
+        double sum = 0;
+        if (arr1.length != arr2.length) {
+            throw new ArithmeticException("Can not calculate scalar product if arrays don't have same size");
+        }
+        for (int i = 0; i < arr1.length; i++) {
+            sum += arr1[i] * arr2[i];
+        }
+        return sum;
+    }
+
+    static double sumOfSquares(Double[] array) {
+        double sum = 0;
+        for (double d : array) {
+            sum += Math.pow(d, 2);
+        }
+        return sum;
+    }
+
+    static void printDocumentMatrixToConsole(double[][] m) {
+        StringBuilder sb = new StringBuilder("\t");
+        // Add the title line containing the labels for each column
+        for (int i = 0; i < m.length; i++) {
+            sb.append("d");
+            sb.append(i + 1);
+            sb.append("\t");
+        }
+        // Print each line of the matrix, preceded by one label for the row
+        for (int i = 0; i < m.length; i++) {
+            sb.append('d');
+            sb.append(i + 1);
+            sb.append("\t");
+            for (int j = 0; j < m[i].length; j++) {
+                sb.append(m[i][j]);
+                sb.append('\t');
+            }
+            // Remove trailing tab
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        System.out.println(sb.toString());
+    }
+
     public static void main(String[] args) {
         if (args.length == 0) {
             throw new IllegalArgumentException("Missing directory argument");
@@ -76,19 +123,38 @@ public class Main {
         DEBUG = args.length > 1 && args[1].equals("-debug");
         String path = args[0];
 
+        // Read all documents from the given folder
         String[] documents = readDocuments(path);
-        List<HashMap<String, Integer>> frequencyMaps = new ArrayList<>();
 
+        // Generate a frequency map for each document containing the frequency of each word
+        List<HashMap<String, Integer>> frequencyMaps = new ArrayList<>();
         for (int i = 0; i < documents.length; i++) {
             String[] tokens = tokenizeDocument(documents[i]);
             tokens = removeStopWords(tokens);
             frequencyMaps.set(i, generateWordFrequencyMap(tokens));
         }
+
+        // Generate the inverted index from all frequency maps
         InvertedIndex ii = new InvertedIndex(frequencyMaps);
         if (debugEnabled()) {
             System.out.println(ii.toString());
         }
-        // Generate a weighted dictionary for each document and calculate the
-        // document-document incidence matrix
+
+        // Generate the weighted dictionaries for each document
+        List<HashMap<String, Double>> weightedDictionaries = new ArrayList<>();
+        for (int i = 0; i < frequencyMaps.size(); i++) {
+            weightedDictionaries.set(i, generateWeightedDictionary(ii, frequencyMaps.get(i), documents.length));
+        }
+
+        // Combine the weights using the cosine similarity into one big matrix
+        double[][] similarityMatrix = new double[documents.length][documents.length];
+        for (int i = 0; i < documents.length; i++) {
+            for (int j = 0; j < documents.length; j++) {
+                similarityMatrix[i][j] = cosineSimilarity(weightedDictionaries.get(i), weightedDictionaries.get(j));
+            }
+        }
+
+        // Print to results to the console
+        printDocumentMatrixToConsole(similarityMatrix);
     }
 }
