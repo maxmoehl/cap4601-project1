@@ -53,6 +53,9 @@ public class Main {
      * dfi = ii.getDocumentIds(word).length<br>
      * wij = (1 + log(tfij)) * log(N / dfi)
      *
+     * @param ii the inverted index for the documents to be processed
+     * @param frequencyMap word frequencies for the document that is being processed
+     * @param documentCount total count of documents to be processed
      * @return weighted dictionary
      * @author Maximilian Moehl
      */
