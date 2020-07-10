@@ -80,6 +80,15 @@ public class InvertedIndex {
         return dict;
     }
 
+    /**
+     * Generates a string representation of the inverted index.<br>
+     * Example:<br>
+     * banana: 1, 4, 5, 7, 19<br>
+     * cherry: 3, 4, 5, 8<br>
+     * pea: 4, 3, ...<br>
+     *
+     * @return constructed string
+     */
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
