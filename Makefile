@@ -1,6 +1,7 @@
 default: build run
 
 build:
+	if ! [ -d ./out/production/cap4601-project1 ]; then mkdir -p ./out/production/cap4601-project1; fi
 	javac src/*.java -d ./out/production/cap4601-project1
 
 run:
