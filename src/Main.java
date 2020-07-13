@@ -18,12 +18,18 @@ public class Main {
         return DEBUG;
     }
 
-    // Yanick
+    /**
+     *
+     * @param folderPath
+     * @return
+     * @author Yanick Schweitzer
+     */
     static String[] readDocuments(String folderPath) {
         return null;
     }
 
     /**
+     *
      * @param document
      * @return
      * @author Yanick Schweitzer
