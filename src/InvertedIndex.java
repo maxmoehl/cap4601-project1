@@ -23,7 +23,7 @@ public class InvertedIndex {
     }
 
     /**
-     * Takes a lsit of frequency maps and builds an InvertedIndex out of them
+     * Takes a list of frequency maps and builds an InvertedIndex out of them
      * for further usage.
      *
      * @param frequencyMaps should contain frequency maps of multiple documents

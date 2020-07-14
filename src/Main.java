@@ -19,7 +19,6 @@ public class Main {
     }
 
     /**
-     *
      * @param folderPath
      * @return
      * @author Yanick Schweitzer
@@ -29,7 +28,6 @@ public class Main {
     }
 
     /**
-     *
      * @param document
      * @return
      * @author Yanick Schweitzer
@@ -50,7 +48,7 @@ public class Main {
     }
 
     /**
-     * Generates a HashMap that uses a word as a key stores the weight for it
+     * Generates a HashMap that uses words as keys and stores the weight for them
      * in the value. For reference, this is the 'translation':<br><br>
      * tfij = frequencyMap.get(word)<br>
      * N = documentCount<br>
@@ -79,6 +77,7 @@ public class Main {
      * @param weightedDictionary1 first document
      * @param weightedDictionary2 second document
      * @return cosine similarity
+     * @throws ArithmeticException if any dictionary has a different length than the others
      * @author Maximilian Moehl
      */
     static double cosineSimilarity(HashMap<String, Double> weightedDictionary1, HashMap<String, Double> weightedDictionary2) {
@@ -91,6 +90,7 @@ public class Main {
     /**
      * Calculates the scalar product (also called inner product) of two vectors
      * that have the same size
+     *
      * @param arr1 first array of doubles
      * @param arr2 second array of doubles
      * @return scalar product
@@ -111,6 +111,7 @@ public class Main {
     /**
      * Takes a given array of doubles, raises every value to the power
      * of two and sums them up.
+     *
      * @param array to be processed
      * @return sum of squares
      * @author Maximilian Moehl
@@ -155,7 +156,9 @@ public class Main {
     }
 
     /**
-     * The main function of this java program
+     * The main function of this java program. Each document gets assigned an
+     * id starting with 0 for the first document that is read and counting upwards
+     * for every additional document.
      *
      * @param args command line arguments
      * @author Maximilian Moehl
@@ -173,10 +176,10 @@ public class Main {
 
         // Generate a frequency map for each document containing the frequency of each word
         List<HashMap<String, Integer>> frequencyMaps = new ArrayList<>();
-        for (int i = 0; i < documents.length; i++) {
-            String[] tokens = tokenizeDocument(documents[i]);
+        for (String document : documents) {
+            String[] tokens = tokenizeDocument(document);
             tokens = removeStopWords(tokens);
-            frequencyMaps.set(i, generateWordFrequencyMap(tokens));
+            frequencyMaps.add(generateWordFrequencyMap(tokens));
         }
 
         // Generate the inverted index from all frequency maps
@@ -187,8 +190,8 @@ public class Main {
 
         // Generate the weighted dictionaries for each document
         List<HashMap<String, Double>> weightedDictionaries = new ArrayList<>();
-        for (int i = 0; i < frequencyMaps.size(); i++) {
-            weightedDictionaries.set(i, generateWeightedDictionary(ii, frequencyMaps.get(i), documents.length));
+        for (HashMap<String, Integer> frequencyMap : frequencyMaps) {
+            weightedDictionaries.add(generateWeightedDictionary(ii, frequencyMap, documents.length));
         }
 
         // Combine the weights into one big matrix using the cosine similarity
