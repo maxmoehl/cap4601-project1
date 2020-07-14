@@ -2,6 +2,11 @@
 
 ## build and execute
 
+### Prerequisites
+
+Make sure you have up to date JDK and JRE installed and can
+access the `java` and `javac` commands from the command line. 
+
 ### On systems that support *nix shell commands
 
 The Makefile defines three targets: `build`, `run` and `debug`.
