@@ -14,10 +14,19 @@ import java.util.StringTokenizer;
 
 public class Main {
     private static boolean DEBUG;
-    private static String[] stopWords;
     
     static boolean debugEnabled() {
         return DEBUG;
+    }
+
+    /**
+     *
+     * @param filePath
+     * @return
+     * @author Yanick Schweitzer
+     */
+    static String[] getStopWords(String filePath) {
+        return null;
     }
 
     /**
@@ -44,7 +53,7 @@ public class Main {
      * 
      * @author Lucas Timm
      */
-    static String[] removeStopWords(String[] document) {
+    static String[] removeStopWords(String[] document, String[] stopWords) {
         ArrayList<String> cleanedWordList = new ArrayList<>();
         for (int i = 0; i<document.length; i++) {
         	if(Arrays.binarySearch(stopWords, document[i])<0) {
@@ -154,7 +163,7 @@ public class Main {
     /**
      * Takes the finished document matrix, builds a string
      * representing the whole matrix including labels and
-     * prints it to the console
+     * prints it to the console.
      *
      * @param m document matrix containing cosine similarity values
      * @author Maximilian Moehl
@@ -167,17 +176,19 @@ public class Main {
             sb.append(i + 1);
             sb.append("\t");
         }
+        sb.append('\n');
         // Print each line of the matrix, preceded by one label for the row
         for (int i = 0; i < m.length; i++) {
             sb.append('d');
             sb.append(i + 1);
-            sb.append("\t");
+            sb.append('\t');
             for (int j = 0; j < m[i].length; j++) {
                 sb.append(m[i][j]);
                 sb.append('\t');
             }
             // Remove trailing tab
             sb.deleteCharAt(sb.length() - 1);
+            sb.append('\n');
         }
         System.out.println(sb.toString());
     }
@@ -191,21 +202,23 @@ public class Main {
      * @author Maximilian Moehl
      */
     public static void main(String[] args) {
-        if (args.length == 0) {
-            throw new IllegalArgumentException("Missing directory argument");
+        if (args.length < 2 || args.length > 3) {
+            throw new IllegalArgumentException("Usage: Main <documents folder path> <stop-words file> [-debug]");
         }
         // Check if the -debug flag is set and store in DEBUG
-        DEBUG = args.length > 1 && args[1].equals("-debug");
-        String path = args[0];
+        DEBUG = args.length == 3 && args[2].equals("-debug");
+        String documentFolderPath = args[0];
+        String stopWordsFilePath = args[1];
 
-        // Read all documents from the given folder
-        String[] documents = readDocuments(path);
+        // Read stop words and documents
+        String[] stopWords = getStopWords(stopWordsFilePath);
+        String[] documents = readDocuments(documentFolderPath);
 
         // Generate a frequency map for each document containing the frequency of each word
         List<HashMap<String, Integer>> frequencyMaps = new ArrayList<>();
         for (String document : documents) {
             String[] tokens = tokenizeDocument(document);
-            tokens = removeStopWords(tokens);
+            tokens = removeStopWords(tokens, stopWords);
             frequencyMaps.add(generateWordFrequencyMap(tokens));
         }
 
