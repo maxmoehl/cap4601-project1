@@ -30,11 +30,12 @@ public class InvertedIndex {
      */
     public InvertedIndex(List<HashMap<String, Integer>> frequencyMaps) {
         this();
+        // For every frequency map
         for (int i = 0; i < frequencyMaps.size(); i++) {
-            // iterate over all contents
-            for (Map.Entry<String, Integer> stringIntegerEntry : frequencyMaps.get(i).entrySet()) {
-                // and store them in the InvertedIndex
-                this.addDocumentId(stringIntegerEntry.getKey(), i);
+            // iterate over all words
+            for (Map.Entry<String, Integer> word : frequencyMaps.get(i).entrySet()) {
+                // and store the relation between word and document id
+                this.addDocumentId(word.getKey(), i);
             }
         }
     }
@@ -101,7 +102,7 @@ public class InvertedIndex {
             }
             // Remove trailing commas and spaces
             s.delete(s.length() - 2, s.length() - 1);
-            s.append("\n");
+            s.append('\n');
         }
         return s.toString();
     }
