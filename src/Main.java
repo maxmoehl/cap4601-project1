@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -13,7 +14,8 @@ import java.util.StringTokenizer;
 
 public class Main {
     private static boolean DEBUG;
-
+    private static String[] stopWords;
+    
     static boolean debugEnabled() {
         return DEBUG;
     }
@@ -37,15 +39,40 @@ public class Main {
         return null;
     }
 
-    // Lucas
-    static String[] removeStopWords(String[] documents) {
-        return null;
+    /**
+     * 
+     * 
+     * @author Lucas Timm
+     */
+    static String[] removeStopWords(String[] document) {
+        ArrayList<String> cleanedWordList = new ArrayList<>();
+        for (int i = 0; i<document.length; i++) {
+        	if(Arrays.binarySearch(stopWords, document[i])<0) {
+        		cleanedWordList.add(document[i]);
+        	}
+        }
+        String[] cleanedStringArray = new String[cleanedWordList.size()];
+    	return cleanedWordList.toArray(cleanedStringArray);
     }
 
-    // Lucas
+    /**
+     * 
+     * @param document 	Document that should be analyzed by word count
+     * @return 			Word frequency table as a HashMap data type
+     * @author Lucas Timm
+     */
     static HashMap<String, Integer> generateWordFrequencyMap(String[] document) {
-        return null;
-    }
+        HashMap<String, Integer> wordFrequencyMap = new HashMap<>();
+    	for (int i = 0; i<document.length; i++) {
+    		if(wordFrequencyMap.containsKey(document[i])) {
+    			int val = wordFrequencyMap.get(document[i]);
+    			wordFrequencyMap.put(document[i], val++);
+    		} else {
+    			wordFrequencyMap.put(document[i], 1);
+    		}
+        }
+    	return wordFrequencyMap;
+        }
 
     /**
      * Generates a HashMap that uses words as keys and stores the weight for them
