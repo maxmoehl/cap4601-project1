@@ -75,7 +75,7 @@ public class Main {
     	for (int i = 0; i<document.length; i++) {
     		if(wordFrequencyMap.containsKey(document[i])) {
     			int val = wordFrequencyMap.get(document[i]);
-    			wordFrequencyMap.put(document[i], val++);
+    			wordFrequencyMap.put(document[i], val + 1);
     		} else {
     			wordFrequencyMap.put(document[i], 1);
     		}
