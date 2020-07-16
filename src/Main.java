@@ -1,3 +1,10 @@
+import javax.imageio.IIOException;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,7 +32,14 @@ public class Main {
      * @author Yanick Schweitzer
      */
     static String[] getStopWords(String filePath) {
-        return null;
+        String stopWordString;
+        try {
+            stopWordString = Files.readString(Paths.get(filePath), StandardCharsets.US_ASCII);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not read stopwords file.");
+        }
+
+        return tokenizeDocument(stopWordString);
     }
 
     /**
@@ -34,6 +48,40 @@ public class Main {
      * @author Yanick Schweitzer
      */
     static String[] readDocuments(String folderPath) {
+        String[] documentsArray;
+        File folderDir = new File(folderPath);
+        ArrayList<String> filenames = new ArrayList();
+
+        File[] fileList = folderDir.listFiles (new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name)
+            {
+                return name.endsWith(".txt");
+            }
+        });
+
+        // check if any files were found
+        if (fileList == null) {
+            throw new RuntimeException("No documents found.");
+        }
+
+        for (File file : fileList)
+        {
+            filenames.add(folderPath + File.separator + file.getName());
+        }
+
+        for (String currentFile : filenames)
+        {
+            String currentDocumentString;
+            try {
+                currentDocumentString = Files.readString(Paths.get(currentFile), StandardCharsets.US_ASCII);
+            } catch (IOException e) {
+                throw new RuntimeException("Could not read document file.");
+            }
+            String[] currentDocumentTokenized = tokenizeDocument(currentDocumentString);
+            //jetzt in documentsArray packen, aber wie kann man zwischen zwei Dokumenten unterscheiden
+        }
+
         return null;
     }
 
@@ -204,6 +252,7 @@ public class Main {
         }
         // Check if the -debug flag is set and store in DEBUG
         DEBUG = args.length == 3 && args[2].equals("-debug");
+
         String documentFolderPath = args[0];
         String stopWordsFilePath = args[1];
 
