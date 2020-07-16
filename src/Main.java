@@ -235,7 +235,7 @@ public class Main {
      * for every additional document.
      *
      * @param args command line arguments
-     * @author Maximilian Moehl
+     * @author Lucas Timm, Maximilian Moehl, Yanick Schweitzer
      */
     public static void main(String[] args) {
         if (args.length < 2 || args.length > 3) {
