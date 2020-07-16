@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Main {
     private static boolean DEBUG;
-    
+
     static boolean debugEnabled() {
         return DEBUG;
     }
@@ -47,10 +47,9 @@ public class Main {
         File folderDir = new File(folderPath);
         ArrayList<String> filenames = new ArrayList();
 
-        File[] fileList = folderDir.listFiles (new FilenameFilter() {
+        File[] fileList = folderDir.listFiles(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String name)
-            {
+            public boolean accept(File dir, String name) {
                 return name.endsWith(".txt");
             }
         });
@@ -60,13 +59,11 @@ public class Main {
             throw new RuntimeException("No documents found.");
         }
 
-        for (File file : fileList)
-        {
+        for (File file : fileList) {
             filenames.add(folderPath + File.separator + file.getName());
         }
 
-        for (String currentFile : filenames)
-        {
+        for (String currentFile : filenames) {
             String currentDocumentString;
             try {
                 currentDocumentString = Files.readString(Paths.get(currentFile), StandardCharsets.US_ASCII);
@@ -95,33 +92,32 @@ public class Main {
      */
     static String[] removeStopWords(String[] document, String[] stopWords) {
         ArrayList<String> cleanedWordList = new ArrayList<>();
-        for (int i = 0; i<document.length; i++) {
-        	if(Arrays.binarySearch(stopWords, document[i])<0) {
-        		cleanedWordList.add(document[i]);
-        	}
+        for (String word : document) {
+            if (Arrays.binarySearch(stopWords, word) < 0) {
+                cleanedWordList.add(word);
+            }
         }
         String[] cleanedStringArray = new String[cleanedWordList.size()];
-    	return cleanedWordList.toArray(cleanedStringArray);
+        return cleanedWordList.toArray(cleanedStringArray);
     }
 
     /**
-     * 
-     * @param document 	Document that should be analyzed by word count
-     * @return 			Word frequency table as a HashMap data type
+     * @param document Document that should be analyzed by word count
+     * @return Word frequency table as a HashMap data type
      * @author Lucas Timm
      */
     static HashMap<String, Integer> generateWordFrequencyMap(String[] document) {
         HashMap<String, Integer> wordFrequencyMap = new HashMap<>();
-    	for (int i = 0; i<document.length; i++) {
-    		if(wordFrequencyMap.containsKey(document[i])) {
-    			int val = wordFrequencyMap.get(document[i]);
-    			wordFrequencyMap.put(document[i], val + 1);
-    		} else {
-    			wordFrequencyMap.put(document[i], 1);
-    		}
+        for (String word : document) {
+            if (wordFrequencyMap.containsKey(word)) {
+                int val = wordFrequencyMap.get(word);
+                wordFrequencyMap.put(word, val + 1);
+            } else {
+                wordFrequencyMap.put(word, 1);
+            }
         }
-    	return wordFrequencyMap;
-        }
+        return wordFrequencyMap;
+    }
 
     /**
      * Generates a HashMap that uses words as keys and stores the weight for them
