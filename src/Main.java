@@ -21,8 +21,10 @@ public class Main {
     }
 
     /**
-     * @param filePath
-     * @return
+     * Method to read the stopwords file into a string and to return the stopwords in a tokenized array
+     *
+     * @param filePath String which states the file path were the stopwords file is located
+     * @return Returns a tokenized String Array of all stopwords
      * @author Yanick Schweitzer
      */
     static String[] getStopWords(String filePath) {
@@ -32,13 +34,14 @@ public class Main {
         } catch (IOException e) {
             throw new RuntimeException("Could not read stopwords file.");
         }
-
         return tokenizeDocument(stopWordString);
     }
 
     /**
-     * @param folderPath
-     * @return
+     * Method to read n documents from a specified folder and to return them in a string array
+     *
+     * @param folderPath Path to the folder where the documents are located
+     * @return Returns a string array containing all documents from the specified folder
      * @author Yanick Schweitzer
      */
     static String[] readDocuments(String folderPath) {
@@ -77,12 +80,15 @@ public class Main {
     }
 
     /**
-     * @param document
-     * @return
+     * Method to tokenize Sttrings and return them as an Array
+     *
+     * @param document Document tthat should be tokenized
+     * @return Returns a tokenized String Array of the given String
      * @author Yanick Schweitzer
      */
     static String[] tokenizeDocument(String document) {
-        StringTokenizer st = new StringTokenizer(document);
+        final String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]}§%/=";
+        StringTokenizer st = new StringTokenizer(document, SEPARATORS);
         ArrayList<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
             tokens.add(st.nextToken());
