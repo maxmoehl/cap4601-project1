@@ -76,6 +76,7 @@ public class InvertedIndex {
         int index = 0;
         for (Map.Entry<String, ArrayList<Integer>> e : store.entrySet()) {
             dict[index] = e.getKey();
+            index++;
         }
         Arrays.sort(dict);
         return dict;

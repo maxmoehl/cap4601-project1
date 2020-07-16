@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -84,8 +83,8 @@ public class Main {
      */
     static String[] tokenizeDocument(String document) {
         StringTokenizer st = new StringTokenizer(document);
-        ArrayList <String> tokens = new ArrayList<>();
-        while(st.hasMoreTokens()) {
+        ArrayList<String> tokens = new ArrayList<>();
+        while (st.hasMoreTokens()) {
             tokens.add(st.nextToken());
         }
         String[] returnArray = new String[tokens.size()];
@@ -127,7 +126,8 @@ public class Main {
 
     /**
      * Generates a HashMap that uses words as keys and stores the weight for them
-     * in the value. For reference, this is the 'translation':<br><br>
+     * in the value. If the word is not present in the document the weight gets set
+     * to zero. For reference, this is the 'translation':<br><br>
      * tfij = frequencyMap.get(word)<br>
      * N = documentCount<br>
      * dfi = ii.getDocumentIds(word).length<br>
@@ -143,7 +143,11 @@ public class Main {
         HashMap<String, Double> weightedDict = new HashMap<>();
         String[] dict = ii.getDictionary();
         for (String word : dict) {
-            weightedDict.put(word, (1 + Math.log(frequencyMap.get(word))) * Math.log((double) documentCount / ii.getDocumentIds(word).length));
+            if (frequencyMap.get(word) == null) {
+                weightedDict.put(word, 0.0);
+            } else {
+                weightedDict.put(word, (1 + Math.log(frequencyMap.get(word))) * Math.log((double) documentCount / ii.getDocumentIds(word).length));
+            }
         }
         return weightedDict;
     }
