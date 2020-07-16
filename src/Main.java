@@ -48,12 +48,7 @@ public class Main {
         File folderDir = new File(folderPath);
         ArrayList<String> filenames = new ArrayList<>();
 
-        File[] fileList = folderDir.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".txt");
-            }
-        });
+        File[] fileList = folderDir.listFiles((dir, name) -> name.endsWith(".txt"));
 
         // check if any files were found
         if (fileList == null) {
