@@ -20,7 +20,6 @@ public class Main {
     }
 
     /**
-     *
      * @param filePath
      * @return
      * @author Yanick Schweitzer
@@ -49,8 +48,6 @@ public class Main {
     }
 
     /**
-     * 
-     * 
      * @author Lucas Timm
      */
     static String[] removeStopWords(String[] document, String[] stopWords) {
