@@ -29,7 +29,7 @@ public class Main {
     static String[] getStopWords(String filePath) {
         String stopWordString;
         try {
-            stopWordString = Files.readString(Paths.get(filePath), StandardCharsets.US_ASCII);
+            stopWordString = new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
             throw new RuntimeException("Could not read stopwords file.");
         }
@@ -43,9 +43,8 @@ public class Main {
      * @author Yanick Schweitzer
      */
     static String[] readDocuments(String folderPath) {
-        String[] documentsArray;
         File folderDir = new File(folderPath);
-        ArrayList<String> filenames = new ArrayList();
+        ArrayList<String> filenames = new ArrayList<>();
 
         File[] fileList = folderDir.listFiles(new FilenameFilter() {
             @Override
@@ -63,18 +62,19 @@ public class Main {
             filenames.add(folderPath + File.separator + file.getName());
         }
 
-        for (String currentFile : filenames) {
+        String[] documentsArray = new String[filenames.size()];
+
+        for (int i = 0; i < filenames.size(); i++) {
             String currentDocumentString;
             try {
-                currentDocumentString = Files.readString(Paths.get(currentFile), StandardCharsets.US_ASCII);
+                currentDocumentString = new String(Files.readAllBytes(Paths.get(filenames.get(i))));
             } catch (IOException e) {
                 throw new RuntimeException("Could not read document file.");
             }
-            String[] currentDocumentTokenized = tokenizeDocument(currentDocumentString);
-            //jetzt in documentsArray packen, aber wie kann man zwischen zwei Dokumenten unterscheiden
+            documentsArray[i] = currentDocumentString;
         }
 
-        return null;
+        return documentsArray;
     }
 
     /**
@@ -84,7 +84,13 @@ public class Main {
      */
     static String[] tokenizeDocument(String document) {
         StringTokenizer st = new StringTokenizer(document);
-        return null;
+        ArrayList <String> tokens = new ArrayList<>();
+        while(st.hasMoreTokens()) {
+            tokens.add(st.nextToken());
+        }
+        String[] returnArray = new String[tokens.size()];
+
+        return tokens.toArray(returnArray);
     }
 
     /**
