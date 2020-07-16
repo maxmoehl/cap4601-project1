@@ -80,7 +80,7 @@ public class Main {
     }
 
     /**
-     * Method to tokenize Sttrings and return them as an Array
+     * Method to tokenize Strings and return them as an Array
      *
      * @param document Document tthat should be tokenized
      * @return Returns a tokenized String Array of the given String
