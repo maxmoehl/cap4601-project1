@@ -229,7 +229,8 @@ public class Main {
             sb.append(i + 1);
             sb.append('\t');
             for (int j = 0; j < m[i].length; j++) {
-                sb.append(m[i][j]);
+                sb.append((double) Math.round(m[i][j] * 10000) / 10000);
+                //sb.append(m[i][j]);
                 sb.append('\t');
             }
             // Remove trailing tab
