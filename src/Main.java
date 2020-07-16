@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,6 +14,7 @@ import java.util.*;
 
 public class Main {
     private static boolean DEBUG;
+    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]}§%/=";
 
     static boolean debugEnabled() {
         return DEBUG;
@@ -54,13 +54,11 @@ public class Main {
         if (fileList == null) {
             throw new RuntimeException("No documents found.");
         }
-
         for (File file : fileList) {
             filenames.add(folderPath + File.separator + file.getName());
         }
 
         String[] documentsArray = new String[filenames.size()];
-
         for (int i = 0; i < filenames.size(); i++) {
             String currentDocumentString;
             try {
@@ -70,7 +68,6 @@ public class Main {
             }
             documentsArray[i] = currentDocumentString;
         }
-
         return documentsArray;
     }
 
@@ -82,14 +79,12 @@ public class Main {
      * @author Yanick Schweitzer
      */
     static String[] tokenizeDocument(String document) {
-        final String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]}§%/=";
         StringTokenizer st = new StringTokenizer(document, SEPARATORS);
         ArrayList<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
             tokens.add(st.nextToken());
         }
         String[] returnArray = new String[tokens.size()];
-
         return tokens.toArray(returnArray);
     }
 
