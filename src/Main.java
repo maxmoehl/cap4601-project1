@@ -85,6 +85,12 @@ public class Main {
     }
 
     /**
+     * This method removes the imported document by a given array of stopwords and returns the cleaned document as a String array.
+     * 
+     * @param document 	String array that contains the tokenized document designated to be cleaned by the stopwords
+     * @param stopWords String array that contains the collection of words to be removed from the document
+     * @return Returns a String array containing the imported document cleaned by stopwords
+     * 
      * @author Lucas Timm
      */
     static String[] removeStopWords(String[] document, String[] stopWords) {
@@ -99,8 +105,11 @@ public class Main {
     }
 
     /**
-     * @param document Document that should be analyzed by word count
-     * @return Word frequency table as a HashMap data type
+     * This method generates the word-frequency table for one imported document.
+     * The table is being represented as a HashMap data type containing the corresponding word as key and the count as value.
+     * 
+     * @param document String array that contains a tokenized document designated to be counted by word.
+     * @return Returns a HashMap that represents the word-frequency table
      * @author Lucas Timm
      */
     static HashMap<String, Integer> generateWordFrequencyMap(String[] document) {
