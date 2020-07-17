@@ -16,10 +16,6 @@ public class Main {
     private static boolean DEBUG;
     private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]}§%/=";
 
-    static boolean debugEnabled() {
-        return DEBUG;
-    }
-
     /**
      * Method to read the stopwords file into a string and to return the stopwords in a tokenized array
      *
@@ -268,7 +264,7 @@ public class Main {
 
         // Generate the inverted index from all frequency maps
         InvertedIndex ii = new InvertedIndex(frequencyMaps);
-        if (debugEnabled()) {
+        if (DEBUG) {
             System.out.println(ii.toString());
         }
 

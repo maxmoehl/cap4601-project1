@@ -13,13 +13,13 @@ import java.util.*;
 
 public class InvertedIndex {
 
-    private final HashMap<String, ArrayList<Integer>> store;
+    private final SortedMap<String, ArrayList<Integer>> store;
 
     /**
      * Initializes an empty {@code InvertedIndex}.
      */
     public InvertedIndex() {
-        store = new HashMap<>();
+        store = new TreeMap<>();
     }
 
     /**
