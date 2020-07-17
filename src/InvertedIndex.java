@@ -1,10 +1,13 @@
 import java.util.*;
 
 /**
- * This class is used to represent an inverted index. It uses a HashMap as the
+ * This class is used to represent an inverted index. It uses a SortedMap as the
  * underlying data structure and provides functions that fit the use
  * case of an inverted index and basically just translates them to calls
- * on the HashMap.
+ * on the SortedMap.
+ *
+ * Since this Index contains all words and is sorted it also serves as a
+ * dictionary by implementing {@link #getDictionary()}.
  *
  * @author Maximilian Moehl
  * @date 2020/07/10
@@ -13,6 +16,10 @@ import java.util.*;
 
 public class InvertedIndex {
 
+    /**
+     * Serves as the underlying data structure in which all the elements are
+     * stored.
+     */
     private final SortedMap<String, ArrayList<Integer>> store;
 
     /**
