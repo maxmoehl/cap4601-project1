@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Main {
     private static boolean DEBUG;
-    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]}%/=";
+    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=";
 
     /**
      * Method to read the stopwords file into a string and to return the stopwords in a tokenized array
