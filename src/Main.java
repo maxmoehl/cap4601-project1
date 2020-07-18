@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Main {
     private static boolean DEBUG;
-    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=";
+    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=_-";
     private static String[] documentNames;
 
     /**
@@ -232,8 +232,6 @@ public class Main {
     static void printDocumentMatrixToConsole(double[][] m) {
         StringBuilder sb = new StringBuilder("\t");
         // Add the title line containing the labels for each column
-        System.out.println(m.length);
-        System.out.println(documentNames.length);
         for (int i = 0; i < m.length; i++) {
             sb.append(documentNames[i]);
             sb.append("\t");
