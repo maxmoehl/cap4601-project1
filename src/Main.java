@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Main {
     private static boolean DEBUG;
-    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=_-";
+    private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=_-*+&$";
     private static String[] documentNames;
 
     /**
