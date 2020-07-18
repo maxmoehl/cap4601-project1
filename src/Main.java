@@ -15,6 +15,7 @@ import java.util.*;
 public class Main {
     private static boolean DEBUG;
     private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=";
+    private static String[] documentNames;
 
     /**
      * Method to read the stopwords file into a string and to return the stopwords in a tokenized array
@@ -50,8 +51,12 @@ public class Main {
         if (fileList == null) {
             throw new RuntimeException("No documents found.");
         }
-        for (File file : fileList) {
-            filenames.add(folderPath + File.separator + file.getName());
+
+        documentNames = new String[fileList.length];
+
+        for (int i = 0; i < fileList.length; i++) {
+            filenames.add(folderPath + File.separator + fileList[i].getName());
+            documentNames[i] = fileList[i].getName();
         }
 
         String[] documentsArray = new String[filenames.size()];
@@ -134,12 +139,21 @@ public class Main {
     static HashMap<String, Double> generateWeightedDictionary(InvertedIndex ii, HashMap<String, Integer> frequencyMap, int documentCount) {
         HashMap<String, Double> weightedDict = new HashMap<>();
         String[] dict = ii.getDictionary();
+        double maxWeight = 0.0;
         for (String word : dict) {
             if (frequencyMap.get(word) == null) {
                 weightedDict.put(word, 0.0);
             } else {
-                weightedDict.put(word, (1 + Math.log(frequencyMap.get(word))) * Math.log((double) documentCount / ii.getDocumentIds(word).length));
+                double w = (1 + Math.log(frequencyMap.get(word))) * Math.log((double) documentCount / ii.getDocumentIds(word).length);
+                if (maxWeight < w) {
+                    maxWeight = w;
+                }
+                weightedDict.put(word, w);
             }
+        }
+        // Normalize all weights
+        for (Map.Entry<String, Double> word : weightedDict.entrySet()) {
+            weightedDict.put(word.getKey(), word.getValue() / maxWeight);
         }
         return weightedDict;
     }
@@ -209,16 +223,16 @@ public class Main {
     static void printDocumentMatrixToConsole(double[][] m) {
         StringBuilder sb = new StringBuilder("\t");
         // Add the title line containing the labels for each column
+        System.out.println(m.length);
+        System.out.println(documentNames.length);
         for (int i = 0; i < m.length; i++) {
-            sb.append("d");
-            sb.append(i + 1);
+            sb.append(documentNames[i]);
             sb.append("\t");
         }
         sb.append('\n');
         // Print each line of the matrix, preceded by one label for the row
         for (int i = 0; i < m.length; i++) {
-            sb.append('d');
-            sb.append(i + 1);
+            sb.append(documentNames[i]);
             sb.append('\t');
             for (int j = 0; j < m[i].length; j++) {
                 sb.append((double) Math.round(m[i][j] * 10000) / 10000);
