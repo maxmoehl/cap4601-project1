@@ -78,6 +78,11 @@ public class InvertedIndex {
         return returnArray;
     }
 
+    /**
+     * Since this Index contains all words we can easily generate a dictionary
+     *
+     * @return dictionary containing all words that have been included
+     */
     public String[] getDictionary() {
         String[] dict = new String[store.size()];
         int index = 0;
