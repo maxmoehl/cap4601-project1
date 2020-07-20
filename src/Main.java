@@ -73,9 +73,10 @@ public class Main {
     }
 
     /**
-     * Method to tokenize Strings and return them as an Array
+     * Method to tokenize Strings, converts each word to lower case
+     * and return them as an Array
      *
-     * @param document Document tthat should be tokenized
+     * @param document Document that should be tokenized
      * @return Returns a tokenized String Array of the given String
      * @author Yanick Schweitzer
      */
@@ -83,7 +84,7 @@ public class Main {
         StringTokenizer st = new StringTokenizer(document, SEPARATORS);
         ArrayList<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
-            tokens.add(st.nextToken());
+            tokens.add(st.nextToken().toLowerCase());
         }
         String[] returnArray = new String[tokens.size()];
         return tokens.toArray(returnArray);
