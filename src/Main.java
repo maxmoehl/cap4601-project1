@@ -15,23 +15,34 @@ import java.util.*;
 public class Main {
     private static boolean DEBUG;
     private final static String SEPARATORS = " ,:;.!?\t\r\n\"'(){}[]%/=_-*+&$";
+    private static String stopWordsFilePath;
     private static String[] documentNames;
+    private static String[] stopWords;
 
     /**
      * Method to read the stopwords file into a string and to return the stopwords in a tokenized array
      *
-     * @param filePath String which states the file path were the stopwords file is located
      * @return Returns a tokenized String Array of all stopwords
      * @author Yanick Schweitzer
      */
-    static String[] getStopWords(String filePath) {
+    static String[] getStopWords() {
+        if (stopWords != null) {
+            return stopWords;
+        }
         String stopWordString;
         try {
-            stopWordString = new String(Files.readAllBytes(Paths.get(filePath)));
+            stopWordString = new String(Files.readAllBytes(Paths.get(stopWordsFilePath)));
         } catch (IOException e) {
             throw new RuntimeException("Could not read stopwords file.");
         }
-        return tokenizeDocument(stopWordString);
+        StringTokenizer st = new StringTokenizer(stopWordString);
+        stopWords = new String[st.countTokens()];
+        int index = 0;
+        while (st.hasMoreTokens()) {
+            stopWords[index] = st.nextToken();
+            index++;
+        }
+        return stopWords;
     }
 
     /**
@@ -84,7 +95,10 @@ public class Main {
         StringTokenizer st = new StringTokenizer(document, SEPARATORS);
         ArrayList<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens()) {
-            tokens.add(st.nextToken().toLowerCase());
+            String w = st.nextToken().toLowerCase();
+            if (Arrays.binarySearch(getStopWords(), w) < 0) {
+                tokens.add(w);
+            }
         }
         String[] returnArray = new String[tokens.size()];
         return tokens.toArray(returnArray);
@@ -92,11 +106,10 @@ public class Main {
 
     /**
      * This method removes the imported document by a given array of stopwords and returns the cleaned document as a String array.
-     * 
-     * @param document 	String array that contains the tokenized document designated to be cleaned by the stopwords
+     *
+     * @param document  String array that contains the tokenized document designated to be cleaned by the stopwords
      * @param stopWords String array that contains the collection of words to be removed from the document
      * @return Returns a String array containing the imported document cleaned by stopwords
-     * 
      * @author Lucas Timm
      */
     static String[] removeStopWords(String[] document, String[] stopWords) {
@@ -113,7 +126,7 @@ public class Main {
     /**
      * This method generates the word-frequency table for one imported document.
      * The table is being represented as a HashMap data type containing the corresponding word as key and the count as value.
-     * 
+     *
      * @param document String array that contains a tokenized document designated to be counted by word.
      * @return Returns a HashMap that represents the word-frequency table
      * @author Lucas Timm
@@ -244,7 +257,6 @@ public class Main {
             sb.append('\t');
             for (int j = 0; j < m[i].length; j++) {
                 sb.append((double) Math.round(m[i][j] * 10000) / 10000);
-                //sb.append(m[i][j]);
                 sb.append('\t');
             }
             // Remove trailing tab
@@ -270,17 +282,15 @@ public class Main {
         DEBUG = args.length == 3 && args[2].equals("-debug");
 
         String documentFolderPath = args[0];
-        String stopWordsFilePath = args[1];
+        stopWordsFilePath = args[1];
 
         // Read stop words and documents
-        String[] stopWords = getStopWords(stopWordsFilePath);
         String[] documents = readDocuments(documentFolderPath);
 
         // Generate a frequency map for each document containing the frequency of each word
         List<HashMap<String, Integer>> frequencyMaps = new ArrayList<>();
         for (String document : documents) {
             String[] tokens = tokenizeDocument(document);
-            tokens = removeStopWords(tokens, stopWords);
             frequencyMaps.add(generateWordFrequencyMap(tokens));
         }
 
